@@ -6,6 +6,11 @@ import numpy as np
 import ROOT
 from sampleBuilder import samples
 
+def load_cpp():
+    """Load C++ helper functions."""
+    cpp_source = "helpers.h"
+    ROOT.gInterpreter.Declare(f'#include "{str(cpp_source)}"')
+
 todaysDate = datetime.date.today().strftime('%Y%m%d')
 
 # limits for histograms
@@ -131,6 +136,50 @@ def main(dataset, out_dir):
     print(f"    Loose Threshold = {threshold_loose_v4}: ", hist_eff_v4.GetBinContent(hist_eff_v4.FindBin(threshold_loose_v4)))
     print(f"    VLoose Threshold = {threshold_vloose_v4}: ", hist_eff_v4.GetBinContent(hist_eff_v4.FindBin(threshold_vloose_v4)))
 
+    df = df.Filter("nScoutingMuon>=2")
+    df = df.Define("leadMuonCharge","ScoutingMuon_charge.empty()? 0.f : ScoutingMuon_charge[0]")
+    df = df.Define("subLeadMuonCharge","ScoutingMuon_charge.empty()? 0.f : ScoutingMuon_charge[1]")
+    df = df.Define("oppositeMuonCharge", "leadMuonCharge!=subLeadMuonCharge")
+    df = df.Filter("oppositeMuonCharge")
+    df = df.Define("muonP4", "ConstructP4(ScoutingMuon_pt, ScoutingMuon_eta, ScoutingMuon_phi, ScoutingMuon_m)")
+    df = df.Define("diMuonInvMass", "(muonP4[0] + muonP4[1]).M()")
+
+    print("Creating and writing histogram for dimuon inv. mass + axo v3")
+    histModel = ROOT.RDF.TH2DModel(
+        "diMuonInvMass_axov3",
+        "diMuonInvMass_axov3",
+        200,
+        0.0,
+        15.0,
+        hist_score_v3.GetNbinsX(),
+        hist_score_v3.GetXaxis().GetXmin(),
+        hist_score_v3.GetXaxis().GetXmax()
+    )
+    hist_dimuonmass_v3 = df.Histo2D(
+        histModel,
+        "diMuonInvMass",
+        "axol1tl_score_v3"
+    )
+    hist_dimuonmass_v3.Write()
+
+    print("Creating and writing histogram for dimuon inv. mass + axo v4")
+    histModel = ROOT.RDF.TH2DModel(
+        "diMuonInvMass_axov4",
+        "diMuonInvMass_axov4",
+        200,
+        0.0,
+        15.0,
+        hist_score_v4.GetNbinsX(),
+        hist_score_v4.GetXaxis().GetXmin(),
+        hist_score_v4.GetXaxis().GetXmax()
+    )
+    hist_dimuonmass_v4 = df.Histo2D(
+        histModel,
+        "diMuonInvMass",
+        "axol1tl_score_v4"
+    )
+    hist_dimuonmass_v4.Write()
+
     output_file.Close()
 
 if __name__ == "__main__":
@@ -150,5 +199,7 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+
+    load_cpp()
 
     main(args.dataset, args.out_dir)

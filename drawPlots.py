@@ -7,16 +7,10 @@ import numpy as np
 todaysDate = datetime.date.today().strftime('%Y%m%d')
 
 # axol1tl thresholds
-threshold_vtight_v3 = 25000/16
-threshold_tight_v3 = 20486/16
-threshold_nominal_v3 = 18580/16
-threshold_loose_v3 = 17596/16
-threshold_vloose_v3 = 15717/16
-threshold_vtight_v4 = 557/16
-threshold_tight_v4 = 456/16
-threshold_nominal_v4 = 415/16
-threshold_loose_v4 = 389/16
-threshold_vloose_v4 = 346/16
+thresholds_values_v3 = [25000/16, 20486/16, 18580/16, 17596/16, 15717/16]
+thresholds_values_v4 = [557/16, 456/16, 415/16, 389/16, 346/16]
+thresholds_names = ["VTight", "Tight", "Nominal", "Loose", "VLoose"]
+thresholds_colors = ["#5790fc", "#f89c20", "#e42536", "#964a8b", "9c9ca1"]
 
 def main(input_file, output_dir, dataset):
 
@@ -45,40 +39,19 @@ def main(input_file, output_dir, dataset):
     score_hist_v3.GetXaxis().SetRangeUser(0, 3000)
     score_hist_v3.Draw("HIST")
     
-    line1 = ROOT.TLine(threshold_vtight_v3, 0, threshold_vtight_v3, max_val)
-    line1.SetLineColor(ROOT.TColor.GetColor("#5790fc"))
-    line1.SetLineStyle(2)
-    line1.SetLineWidth(2)
-    line1.Draw("same")
-    line2 = ROOT.TLine(threshold_tight_v3, 0, threshold_tight_v3, max_val)
-    line2.SetLineColor(ROOT.TColor.GetColor("#f89c20"))
-    line2.SetLineStyle(2)
-    line2.SetLineWidth(2)
-    line2.Draw("same")
-    line3 = ROOT.TLine(threshold_nominal_v3, 0, threshold_nominal_v3, max_val)
-    line3.SetLineColor(ROOT.TColor.GetColor("#e42536"))
-    line3.SetLineStyle(2)
-    line3.SetLineWidth(2)
-    line3.Draw("same")
-    line4 = ROOT.TLine(threshold_loose_v3, 0, threshold_loose_v3, max_val)
-    line4.SetLineColor(ROOT.TColor.GetColor("#964a8b"))
-    line4.SetLineStyle(2)
-    line4.SetLineWidth(2)
-    line4.Draw("same")
-    line5 = ROOT.TLine(threshold_vloose_v3, 0, threshold_vloose_v3, max_val)
-    line5.SetLineColor(ROOT.TColor.GetColor("#9c9ca1"))
-    line5.SetLineStyle(2)
-    line5.SetLineWidth(2)
-    line5.Draw("same")
+    lines = []
+    for i in range(len(thresholds_names)):
+        lines.append(ROOT.TLine(thresholds_values_v3[i], 0, thresholds_values_v3[i], max_val))
+        lines[-1].SetLineColor(ROOT.TColor.GetColor(thresholds_colors[i]))
+        lines[-1].SetLineStyle(2)
+        lines[-1].SetLineWidth(2)
+        lines[-1].Draw("same")
 
     # create and draw legend
     legend = ROOT.TLegend(0.55, 0.6, 0.9, 0.9)
     legend.AddEntry(score_hist_v3, f"{dataset} Score", "l")
-    legend.AddEntry(line1, "AXO VTight Threshold", "l")
-    legend.AddEntry(line2, "AXO Tight Threshold", "l")
-    legend.AddEntry(line3, "AXO Nominal Threshold", "l")
-    legend.AddEntry(line4, "AXO Loose Threshold", "l")
-    legend.AddEntry(line5, "AXO VLoose Threshold", "l")
+    for i in range(len(lines)):
+        legend.AddEntry(lines[i], f"AXO {thresholds_names[i]} Threshold", "l")
     legend.SetTextSize(0.04)
     legend.SetBorderSize(0)
     legend.SetFillStyle(0)
@@ -104,40 +77,19 @@ def main(input_file, output_dir, dataset):
     score_hist_v4.GetXaxis().SetRangeUser(0, 150)
     score_hist_v4.Draw("HIST")
     
-    line1 = ROOT.TLine(threshold_vtight_v4, 0, threshold_vtight_v4, max_val)
-    line1.SetLineColor(ROOT.TColor.GetColor("#5790fc"))
-    line1.SetLineStyle(2)
-    line1.SetLineWidth(2)
-    line1.Draw("same")
-    line2 = ROOT.TLine(threshold_tight_v4, 0, threshold_tight_v4, max_val)
-    line2.SetLineColor(ROOT.TColor.GetColor("#f89c20"))
-    line2.SetLineStyle(2)
-    line2.SetLineWidth(2)
-    line2.Draw("same")
-    line3 = ROOT.TLine(threshold_nominal_v4, 0, threshold_nominal_v4, max_val)
-    line3.SetLineColor(ROOT.TColor.GetColor("#e42536"))
-    line3.SetLineStyle(2)
-    line3.SetLineWidth(2)
-    line3.Draw("same")
-    line4 = ROOT.TLine(threshold_loose_v4, 0, threshold_loose_v4, max_val)
-    line4.SetLineColor(ROOT.TColor.GetColor("#964a8b"))
-    line4.SetLineStyle(2)
-    line4.SetLineWidth(2)
-    line4.Draw("same")
-    line5 = ROOT.TLine(threshold_vloose_v4, 0, threshold_vloose_v4, max_val)
-    line5.SetLineColor(ROOT.TColor.GetColor("#9c9ca1"))
-    line5.SetLineStyle(2)
-    line5.SetLineWidth(2)
-    line5.Draw("same")
-                                                                               
+    lines = []                                                                                 
+    for i in range(len(thresholds_names)):                                                                                                                              
+        lines.append(ROOT.TLine(thresholds_values_v4[i], 0, thresholds_values_v4[i], max_val))
+        lines[-1].SetLineColor(ROOT.TColor.GetColor(thresholds_colors[i]))
+        lines[-1].SetLineStyle(2)
+        lines[-1].SetLineWidth(2)
+        lines[-1].Draw("same")
+
     # create and draw legend
     legend = ROOT.TLegend(0.55, 0.6, 0.9, 0.9)
     legend.AddEntry(score_hist_v4, f"{dataset} Score", "l")
-    legend.AddEntry(line1, "AXO VTight Threshold", "l")
-    legend.AddEntry(line2, "AXO Tight Threshold", "l")
-    legend.AddEntry(line3, "AXO Nominal Threshold", "l")
-    legend.AddEntry(line4, "AXO Loose Threshold", "l")
-    legend.AddEntry(line5, "AXO VLoose Threshold", "l")
+    for i in range(len(lines)):
+        legend.AddEntry(lines[i], f"AXO {thresholds_names[i]} Threshold", "l")
     legend.SetTextSize(0.04)
     legend.SetBorderSize(0)
     legend.SetFillStyle(0)
@@ -160,40 +112,19 @@ def main(input_file, output_dir, dataset):
     eff_hist_v3.GetXaxis().SetRangeUser(0, 3000)
     eff_hist_v3.Draw("HIST")
 
-    line1 = ROOT.TLine(threshold_vtight_v3, 0, threshold_vtight_v3, 1.5)
-    line1.SetLineColor(ROOT.TColor.GetColor("#5790fc"))
-    line1.SetLineStyle(2)
-    line1.SetLineWidth(2)
-    line1.Draw("same")
-    line2 = ROOT.TLine(threshold_tight_v3, 0, threshold_tight_v3, 1.5)
-    line2.SetLineColor(ROOT.TColor.GetColor("#f89c20"))
-    line2.SetLineStyle(2)
-    line2.SetLineWidth(2)
-    line2.Draw("same")
-    line3 = ROOT.TLine(threshold_nominal_v3, 0, threshold_nominal_v3, 1.5)
-    line3.SetLineColor(ROOT.TColor.GetColor("#e42536"))
-    line3.SetLineStyle(2)
-    line3.SetLineWidth(2)
-    line3.Draw("same")
-    line4 = ROOT.TLine(threshold_loose_v3, 0, threshold_loose_v3, 1.5)
-    line4.SetLineColor(ROOT.TColor.GetColor("#964a8b"))
-    line4.SetLineStyle(2)
-    line4.SetLineWidth(2)
-    line4.Draw("same")
-    line5 = ROOT.TLine(threshold_vloose_v3, 0, threshold_vloose_v3, 1.5)
-    line5.SetLineColor(ROOT.TColor.GetColor("#9c9ca1"))
-    line5.SetLineStyle(2)
-    line5.SetLineWidth(2)
-    line5.Draw("same")
+    lines = []
+    for i in range(len(thresholds_names)):
+        lines.append(ROOT.TLine(thresholds_values_v3[i], 0, thresholds_values_v3[i], 1.5))
+        lines[-1].SetLineColor(ROOT.TColor.GetColor(thresholds_colors[i]))
+        lines[-1].SetLineStyle(2)
+        lines[-1].SetLineWidth(2)
+        lines[-1].Draw("same")
 
     # create and draw legend
     legend = ROOT.TLegend(0.55, 0.6, 0.9, 0.9)
     legend.AddEntry(eff_hist_v3, f"{dataset} Efficiency", "l")
-    legend.AddEntry(line1, "AXO VTight Threshold", "l")
-    legend.AddEntry(line2, "AXO Tight Threshold", "l")
-    legend.AddEntry(line3, "AXO Nominal Threshold", "l")
-    legend.AddEntry(line4, "AXO Loose Threshold", "l")
-    legend.AddEntry(line5, "AXO VLoose Threshold", "l")
+    for i in range(len(lines)):
+        legend.AddEntry(lines[i], f"AXO {thresholds_names[i]} Threshold", "l")
     legend.SetTextSize(0.04)
     legend.SetBorderSize(0)
     legend.SetFillStyle(0)
@@ -216,41 +147,20 @@ def main(input_file, output_dir, dataset):
     eff_hist_v4.GetYaxis().SetRangeUser(1e-8, 1.5)
     eff_hist_v4.GetXaxis().SetRangeUser(0, 150)
     eff_hist_v4.Draw("HIST")
-                                                                             
-    line1 = ROOT.TLine(threshold_vtight_v4, 0, threshold_vtight_v4, 1.5)
-    line1.SetLineColor(ROOT.TColor.GetColor("#5790fc"))
-    line1.SetLineStyle(2)
-    line1.SetLineWidth(2)
-    line1.Draw("same")
-    line2 = ROOT.TLine(threshold_tight_v4, 0, threshold_tight_v4, 1.5)
-    line2.SetLineColor(ROOT.TColor.GetColor("#f89c20"))
-    line2.SetLineStyle(2)
-    line2.SetLineWidth(2)
-    line2.Draw("same")
-    line3 = ROOT.TLine(threshold_nominal_v4, 0, threshold_nominal_v4, 1.5)
-    line3.SetLineColor(ROOT.TColor.GetColor("#e42536"))
-    line3.SetLineStyle(2)
-    line3.SetLineWidth(2)
-    line3.Draw("same")
-    line4 = ROOT.TLine(threshold_loose_v4, 0, threshold_loose_v4, 1.5)
-    line4.SetLineColor(ROOT.TColor.GetColor("#964a8b"))
-    line4.SetLineStyle(2)
-    line4.SetLineWidth(2)
-    line4.Draw("same")
-    line5 = ROOT.TLine(threshold_vloose_v4, 0, threshold_vloose_v4, 1.5)
-    line5.SetLineColor(ROOT.TColor.GetColor("#9c9ca1"))
-    line5.SetLineStyle(2)
-    line5.SetLineWidth(2)
-    line5.Draw("same")
-                                                                             
+
+    lines = []                                                                             
+    for i in range(len(thresholds_names)):                                                                                                                         
+        lines.append(ROOT.TLine(thresholds_values_v4[i], 0, thresholds_values_v4[i], 1.5))                                                                        
+        lines[-1].SetLineColor(ROOT.TColor.GetColor(thresholds_colors[i]))
+        lines[-1].SetLineStyle(2)
+        lines[-1].SetLineWidth(2)
+        lines[-1].Draw("same")
+
     # create and draw legend
     legend = ROOT.TLegend(0.55, 0.6, 0.9, 0.9)
     legend.AddEntry(eff_hist_v4, f"{dataset} Efficiency", "l")
-    legend.AddEntry(line1, "AXO VTight Threshold", "l")
-    legend.AddEntry(line2, "AXO Tight Threshold", "l")
-    legend.AddEntry(line3, "AXO Nominal Threshold", "l")
-    legend.AddEntry(line4, "AXO Loose Threshold", "l")
-    legend.AddEntry(line5, "AXO VLoose Threshold", "l")
+    for i in range(len(lines)):                                                
+        legend.AddEntry(lines[i], f"AXO {thresholds_names[i]} Threshold", "l")
     legend.SetTextSize(0.04)
     legend.SetBorderSize(0)
     legend.SetFillStyle(0)
@@ -260,6 +170,58 @@ def main(input_file, output_dir, dataset):
     c_eff_v4.Draw()
     c_eff_v4.SaveAs(f"{output_dir}/axo_eff_v4_{dataset}_{todaysDate}.png")
     c_eff_v4.Close()
+
+    # dimuon invariant mass plots
+    mass_hist_v3 = f.Get("diMuonInvMass_axov3")
+    mass_hist_v4 = f.Get("diMuonInvMass_axov4")
+    for i in range(len(thresholds_names)):
+        mass_hist_v3_projection = mass_hist_v3.ProjectionX(
+                "mass_hist_v3_projection", 
+                mass_hist_v3.GetXaxis().FindBin(thresholds_values_v3[i]), 
+                mass_hist_v3.GetXaxis().GetNbins()
+        )
+        mass_hist_v4_projection = mass_hist_v4.ProjectionX(
+                "mass_hist_v4_projection", 
+                mass_hist_v4.GetXaxis().FindBin(thresholds_values_v4[i]), 
+                mass_hist_v4.GetXaxis().GetNbins()
+        )
+
+        c_mass_v3 = ROOT.TCanvas("c_mass_v3", "Dimuon Invariant Mass", 1000, 600)
+
+        mass_hist_v3_projection.SetMarkerColor(1)
+        mass_hist_v3_projection.GetXaxis().SetTitle("Dimuon invariant mass [GeV]");
+        mass_hist_v3_projection.GetYaxis().SetTitle("Events");
+        mass_hist_v3_projection.SetStats(0)
+        mass_hist_v3_projection.SetTitle(f"AXO v3 {thresholds_names[i]} Threshold = {thresholds_values_v3[i]}")
+        max_val = 10*mass_hist_v3_projection.GetBinContent(mass_hist_v3_projection.GetMaximumBin())
+        mass_hist_v3_projection.GetYaxis().SetRangeUser(1e-1, max_val)
+        mass_hist_v3_projection.GetXaxis().SetRangeUser(0, 15)
+        mass_hist_v3_projection.Draw("HIST")
+        mass_hist_v3_projection.Draw("E SAME")
+
+        c_mass_v3.SetLogy()
+        c_mass_v3.Draw()
+        c_mass_v3.SaveAs(f"{output_dir}/dimuon_mass_axov3_{thresholds_names[i]}_{dataset}_{todaysDate}.png")
+        c_mass_v3.Close()
+
+        c_mass_v4 = ROOT.TCanvas("c_mass_v4", "Dimuon Invariant Mass", 1000, 600)
+                                                                                                                
+        mass_hist_v4_projection.SetMarkerColor(1)
+        mass_hist_v4_projection.GetXaxis().SetTitle("Dimuon invariant mass [GeV]");
+        mass_hist_v4_projection.GetYaxis().SetTitle("Events");
+        mass_hist_v4_projection.SetStats(0)
+        mass_hist_v4_projection.SetTitle(f"AXO v4 {thresholds_names[i]} Threshold = {thresholds_values_v4[i]}")
+        max_val = 10*mass_hist_v4_projection.GetBinContent(mass_hist_v4_projection.GetMaximumBin())
+        mass_hist_v4_projection.GetYaxis().SetRangeUser(1e-1, max_val)
+        mass_hist_v4_projection.GetXaxis().SetRangeUser(0, 15)
+        mass_hist_v4_projection.Draw("HIST")
+        mass_hist_v4_projection.Draw("E SAME")
+                                                                                                                
+        c_mass_v4.SetLogy()
+        c_mass_v4.Draw()
+        c_mass_v4.SaveAs(f"{output_dir}/dimuon_mass_axov4_{thresholds_names[i]}_{dataset}_{todaysDate}.png")
+        c_mass_v4.Close()
+
 
     f.Close()
 
