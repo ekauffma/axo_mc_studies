@@ -10,7 +10,7 @@ todaysDate = datetime.date.today().strftime('%Y%m%d')
 thresholds_values_v3 = [25000/16, 20486/16, 18580/16, 17596/16, 15717/16]
 thresholds_values_v4 = [557/16, 456/16, 415/16, 389/16, 346/16]
 thresholds_names = ["VTight", "Tight", "Nominal", "Loose", "VLoose"]
-thresholds_colors = ["#5790fc", "#f89c20", "#e42536", "#964a8b", "9c9ca1"]
+thresholds_colors = ["#5790fc", "#f89c20", "#e42536", "#964a8b", "#9c9ca1"]
 
 def main(input_file, output_dir, dataset):
 
@@ -177,14 +177,16 @@ def main(input_file, output_dir, dataset):
     for i in range(len(thresholds_names)):
         mass_hist_v3_projection = mass_hist_v3.ProjectionX(
                 "mass_hist_v3_projection", 
-                mass_hist_v3.GetXaxis().FindBin(thresholds_values_v3[i]), 
-                mass_hist_v3.GetXaxis().GetNbins()
+                mass_hist_v3.GetYaxis().FindBin(thresholds_values_v3[i]), 
+                mass_hist_v3.GetYaxis().GetNbins()
         )
         mass_hist_v4_projection = mass_hist_v4.ProjectionX(
                 "mass_hist_v4_projection", 
-                mass_hist_v4.GetXaxis().FindBin(thresholds_values_v4[i]), 
-                mass_hist_v4.GetXaxis().GetNbins()
+                mass_hist_v4.GetYaxis().FindBin(thresholds_values_v4[i]), 
+                mass_hist_v4.GetYaxis().GetNbins()
         )
+        mass_hist_v3_projection.Rebin(4)
+        mass_hist_v4_projection.Rebin(4)
 
         c_mass_v3 = ROOT.TCanvas("c_mass_v3", "Dimuon Invariant Mass", 1000, 600)
 
