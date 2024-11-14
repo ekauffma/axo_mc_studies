@@ -12,6 +12,11 @@ thresholds_values_v4 = [557/16, 456/16, 415/16, 389/16, 346/16]
 thresholds_names = ["VTight", "Tight", "Nominal", "Loose", "VLoose"]
 thresholds_colors = ["#5790fc", "#f89c20", "#e42536", "#964a8b", "#9c9ca1"]
 
+# for computing signal yield
+n_sigma = 3
+jpsi_low_edge = 3.0969 - n_sigma * 0.03615
+jpsi_high_edge = 3.0969 + n_sigma * 0.03615
+
 def main(input_file, output_dir, dataset):
 
     ROOT.gStyle.SetTitleSize(0.05, "X")
@@ -185,6 +190,17 @@ def main(input_file, output_dir, dataset):
                 mass_hist_v4.GetYaxis().FindBin(thresholds_values_v4[i]), 
                 mass_hist_v4.GetYaxis().GetNbins()
         )
+
+        signal_integral_v3 = mass_hist_v3_projection.Integral(
+                mass_hist_v3_projection.GetXaxis().FindBin(jpsi_low_edge),
+                mass_hist_v3_projection.GetXaxis().FindBin(jpsi_high_edge)
+        )
+        signal_integral_v4 = mass_hist_v4_projection.Integral(
+                mass_hist_v4_projection.GetXaxis().FindBin(jpsi_low_edge),
+                mass_hist_v4_projection.GetXaxis().FindBin(jpsi_high_edge)
+        )
+        print(f"AXO v3: Threshold = AXO {thresholds_names[i]} (Value = {thresholds_values_v3[i]}): Signal Yield = {signal_integral_v3}")
+        print(f"AXO v4: Threshold = AXO {thresholds_names[i]} (Value = {thresholds_values_v4[i]}): Signal Yield = {signal_integral_v4}")
         mass_hist_v3_projection.Rebin(4)
         mass_hist_v4_projection.Rebin(4)
 

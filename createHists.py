@@ -40,6 +40,28 @@ def main(dataset, out_dir):
     print("Getting dataframes")
     df = samples[dataset].getNewDataframe()
 
+    df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_vtight_v3}")
+    print("Number of Events (AXO v3 VTight) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_tight_v3}")
+    print("Number of Events (AXO v3 Tight) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_nominal_v3}")
+    print("Number of Events (AXO v3 Nominal) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_loose_v3}")
+    print("Number of Events (AXO v3 Loose) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_vloose_v3}")
+    print("Number of Events (AXO v3 VLoose) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v4>={threshold_vtight_v4}")
+    print("Number of Events (AXO v4 VTight) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v4>={threshold_tight_v4}")
+    print("Number of Events (AXO v4 Tight) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v4>={threshold_nominal_v4}")
+    print("Number of Events (AXO v4 Nominal) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v4>={threshold_loose_v4}")
+    print("Number of Events (AXO v4 Loose) = ", df_axocut.Count().GetValue())
+    df_axocut = df.Filter(f"axol1tl_score_v4>={threshold_vloose_v4}")
+    print("Number of Events (AXO v4 VLoose) = ", df_axocut.Count().GetValue())
+
+
     # create output ROOT file
     print("Creating output ROOT file")
     fileName = f'{out_dir}/hists_{dataset}_{todaysDate}.root'
