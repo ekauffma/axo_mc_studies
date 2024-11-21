@@ -21,3 +21,23 @@ samples = dict(
 )
 
 f.close()
+
+f = open("filePaths_data.json")
+filePaths = json.load(f)
+
+samples_data = dict(
+    [
+        (
+            sampleName,
+            sample(listOfFiles = filePaths[sampleName], treeNames = treeNames)
+        )
+        for sampleName in filePaths
+    ]
+)
+
+f.close()
+
+
+
+
+

@@ -1,11 +1,18 @@
 import os
 import json
 
-datasets = [
+datasets_MC = [
         "JPsi",
         ]
-directories = [
+directories_MC = [
         "/eos/cms/store/group/phys_exotica/axol1tl/MC_ScoutingNano_withAXOscore/JPsiToMuMu_PT-0to100_pythia8-gun/"
+        ]
+
+datasets_data = [
+        "2024F",
+        ]
+directories_data = [
+        "/eos/cms/store/group/phys_exotica/axol1tl/Data_ScoutingNano_withAXOscore/2024F/"
         ]
 
 def list_root_files(directory):
@@ -17,9 +24,17 @@ def list_root_files(directory):
                 root_files.append(full_path)
     return root_files
 
-filePaths = {}
-for i in range(len(datasets)):
-    filePaths[datasets[i]] = list_root_files(directories[i])
+filePaths_MC = {}
+for i in range(len(datasets_MC)):
+    filePaths_MC[datasets_MC[i]] = list_root_files(directories_MC[i])
 
 with open("filePaths.json", "w") as outfile:
-    json.dump(filePaths, outfile)
+    json.dump(filePaths_MC, outfile)
+
+filePaths_data = {}
+for i in range(len(datasets_data)):
+    filePaths_data[datasets_data[i]] = list_root_files(directories_data[i])
+
+with open("filePaths_data.json", "w") as outfile:
+    json.dump(filePaths_data, outfile)
+

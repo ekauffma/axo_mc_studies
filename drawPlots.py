@@ -217,6 +217,27 @@ def main(input_file, output_dir, dataset):
         mass_hist_v3_projection.Draw("HIST")
         mass_hist_v3_projection.Draw("E SAME")
 
+        low_line = ROOT.TLine(jpsi_low_edge, 0, jpsi_low_edge, max_val)
+        low_line.SetLineColor(ROOT.TColor.GetColor(thresholds_colors[0]))
+        low_line.SetLineStyle(2)
+        low_line.SetLineWidth(2)
+        low_line.Draw("same")
+
+        high_line = ROOT.TLine(jpsi_high_edge, 0, jpsi_high_edge, max_val)
+        high_line.SetLineColor(ROOT.TColor.GetColor(thresholds_colors[1]))
+        high_line.SetLineStyle(2)
+        high_line.SetLineWidth(2)
+        high_line.Draw("same")
+
+        legend = ROOT.TLegend(0.55, 0.6, 0.9, 0.9)
+        legend.AddEntry(mass_hist_v3, f"MC", "l")
+        legend.AddEntry(low_line, f"Low Cut for Efficiency", "l")
+        legend.AddEntry(high_line, "High Cut for Efficiency", "l")
+        legend.SetTextSize(0.04)
+        legend.SetBorderSize(0)
+        legend.SetFillStyle(0)
+        legend.Draw()
+
         c_mass_v3.SetLogy()
         c_mass_v3.Draw()
         c_mass_v3.SaveAs(f"{output_dir}/dimuon_mass_axov3_{thresholds_names[i]}_{dataset}_{todaysDate}.png")
@@ -234,7 +255,33 @@ def main(input_file, output_dir, dataset):
         mass_hist_v4_projection.GetXaxis().SetRangeUser(0, 15)
         mass_hist_v4_projection.Draw("HIST")
         mass_hist_v4_projection.Draw("E SAME")
-                                                                                                                
+                                                                                                               
+        low_line = ROOT.TLine(jpsi_low_edge, 0, jpsi_low_edge, max_val)
+        low_line.SetLineColor(ROOT.TColor.GetColor(thresholds_colors[0]))
+        low_line.SetLineStyle(2)
+        low_line.SetLineWidth(2)
+        low_line.Draw("same")
+                                                                            
+        high_line = ROOT.TLine(jpsi_high_edge, 0, jpsi_high_edge, max_val)
+        high_line.SetLineColor(ROOT.TColor.GetColor(thresholds_colors[1]))
+        high_line.SetLineStyle(2)
+        high_line.SetLineWidth(2)
+        high_line.Draw("same")
+                                                                            
+        legend = ROOT.TLegend(0.55, 0.6, 0.9, 0.9)
+        legend.AddEntry(mass_hist_v4, f"MC", "l")
+        legend.AddEntry(low_line, f"Low Cut for Efficiency", "l")
+        legend.AddEntry(high_line, "High Cut for Efficiency", "l")
+        legend.SetTextSize(0.04)
+        legend.SetBorderSize(0)
+        legend.SetFillStyle(0)
+        legend.Draw()
+
+
+
+
+
+
         c_mass_v4.SetLogy()
         c_mass_v4.Draw()
         c_mass_v4.SaveAs(f"{output_dir}/dimuon_mass_axov4_{thresholds_names[i]}_{dataset}_{todaysDate}.png")

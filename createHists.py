@@ -4,7 +4,7 @@ import datetime
 import json
 import numpy as np
 import ROOT
-from sampleBuilder import samples
+from sampleBuilder import samples, samples_data
 
 def load_cpp():
     """Load C++ helper functions."""
@@ -40,6 +40,7 @@ def main(dataset, out_dir):
     print("Getting dataframes")
     df = samples[dataset].getNewDataframe()
 
+    print("Number of Events Before Filtering = ", df.Count().GetValue())
     df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_vtight_v3}")
     print("Number of Events (AXO v3 VTight) = ", df_axocut.Count().GetValue())
     df_axocut = df.Filter(f"axol1tl_score_v3>={threshold_tight_v3}")
@@ -201,6 +202,30 @@ def main(dataset, out_dir):
         "axol1tl_score_v4"
     )
     hist_dimuonmass_v4.Write()
+
+    df_data = samples_data["2024F"].getNewDataframe()
+
+    print("Creating and writing histogram for MC NPV")
+    histModel = ROOT.RDF.TH1DModel(
+        "npv_mc",
+        "npv_mc",
+        100,
+        0,
+        100,
+    )
+    hist_mc_npv = df.Histo1D(
+        histModel,
+        "nScoutingPrimaryVertex"
+    )
+    hist_mc_npv.Write()
+
+
+
+
+
+
+
+
 
     output_file.Close()
 
