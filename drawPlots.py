@@ -179,6 +179,8 @@ def main(input_file, output_dir, dataset):
     # dimuon invariant mass plots
     mass_hist_v3 = f.Get("diMuonInvMass_axov3")
     mass_hist_v4 = f.Get("diMuonInvMass_axov4")
+    pt_hist_v3 = f.Get("diMuonInvPt_axov3")
+    pt_hist_v4 = f.Get("diMuonInvPt_axov4")
     for i in range(len(thresholds_names)):
         mass_hist_v3_projection = mass_hist_v3.ProjectionX(
                 "mass_hist_v3_projection", 
@@ -277,15 +279,85 @@ def main(input_file, output_dir, dataset):
         legend.SetFillStyle(0)
         legend.Draw()
 
-
-
-
-
-
         c_mass_v4.SetLogy()
         c_mass_v4.Draw()
         c_mass_v4.SaveAs(f"{output_dir}/dimuon_mass_axov4_{thresholds_names[i]}_{dataset}_{todaysDate}.png")
         c_mass_v4.Close()
+
+        pt_hist_v3_projection = pt_hist_v3.ProjectionX(
+                "pt_hist_v3_projection", 
+                pt_hist_v3.GetYaxis().FindBin(thresholds_values_v3[i]), 
+                pt_hist_v3.GetYaxis().GetNbins()
+        )
+        pt_hist_v4_projection = pt_hist_v4.ProjectionX(
+                "pt_hist_v4_projection", 
+                pt_hist_v4.GetYaxis().FindBin(thresholds_values_v4[i]), 
+                pt_hist_v4.GetYaxis().GetNbins()
+        )
+        pt_hist_v3_projection.Rebin(4)
+        pt_hist_v4_projection.Rebin(4)
+
+        c_pt_v3 = ROOT.TCanvas("c_pt_v3", "Dimuon pT", 1000, 600)
+                                                                                                                
+        pt_hist_v3_projection.SetMarkerColor(1)
+        pt_hist_v3_projection.GetXaxis().SetTitle("Dimuon pT [GeV]");
+        pt_hist_v3_projection.GetYaxis().SetTitle("Events");
+        pt_hist_v3_projection.SetStats(0)
+        pt_hist_v3_projection.SetTitle(f"AXO v3 {thresholds_names[i]} Threshold = {thresholds_values_v3[i]}")
+        max_val = 10*pt_hist_v3_projection.GetBinContent(pt_hist_v3_projection.GetMaximumBin())
+        pt_hist_v3_projection.GetYaxis().SetRangeUser(1e-1, max_val)
+        pt_hist_v3_projection.GetXaxis().SetRangeUser(0, 500)
+        pt_hist_v3_projection.Draw("HIST")
+        pt_hist_v3_projection.Draw("E SAME")
+                                                                                                                
+        c_pt_v3.SetLogy()
+        c_pt_v3.Draw()
+        c_pt_v3.SaveAs(f"{output_dir}/dimuon_pt_axov3_{thresholds_names[i]}_{dataset}_{todaysDate}.png")
+        c_pt_v3.Close()
+
+        c_pt_v4 = ROOT.TCanvas("c_pt_v4", "Dimuon pT", 1000, 600)
+                                                                                                                
+        pt_hist_v4_projection.SetMarkerColor(1)
+        pt_hist_v4_projection.GetXaxis().SetTitle("Dimuon pT [GeV]");
+        pt_hist_v4_projection.GetYaxis().SetTitle("Events");
+        pt_hist_v4_projection.SetStats(0)
+        pt_hist_v4_projection.SetTitle(f"AXO v4 {thresholds_names[i]} Threshold = {thresholds_values_v4[i]}")
+        max_val = 10*pt_hist_v4_projection.GetBinContent(pt_hist_v4_projection.GetMaximumBin())
+        pt_hist_v4_projection.GetYaxis().SetRangeUser(1e-1, max_val)
+        pt_hist_v4_projection.GetXaxis().SetRangeUser(0, 500)
+        pt_hist_v4_projection.Draw("HIST")
+        pt_hist_v4_projection.Draw("E SAME")
+                                                                                                                
+        c_pt_v4.SetLogy()
+        c_pt_v4.Draw()
+        c_pt_v4.SaveAs(f"{output_dir}/dimuon_pt_axov4_{thresholds_names[i]}_{dataset}_{todaysDate}.png")
+        c_pt_v4.Close()
+
+    pt_hist_projection = pt_hist_v4.ProjectionX(
+            "pt_hist_projection",
+    )
+    pt_hist_projection.Rebin(4)
+                                                                                                             
+    c_pt = ROOT.TCanvas("c_pt", "Dimuon pT", 1000, 600)
+                                                                                                            
+    pt_hist_projection.SetMarkerColor(1)
+    pt_hist_projection.GetXaxis().SetTitle("Dimuon pT [GeV]");
+    pt_hist_projection.GetYaxis().SetTitle("Events");
+    pt_hist_projection.SetStats(0)
+    pt_hist_projection.SetTitle(f" ")
+    max_val = 10*pt_hist_projection.GetBinContent(pt_hist_projection.GetMaximumBin())
+    pt_hist_projection.GetYaxis().SetRangeUser(1e-1, max_val)
+    pt_hist_projection.GetXaxis().SetRangeUser(0, 500)
+    pt_hist_projection.Draw("HIST")
+    pt_hist_projection.Draw("E SAME")
+                                                                                                            
+    c_pt.SetLogy()
+    c_pt.Draw()
+    c_pt.SaveAs(f"{output_dir}/dimuon_pt_{dataset}_{todaysDate}.png")
+    c_pt.Close()
+
+
+
 
 
     f.Close()

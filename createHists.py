@@ -4,7 +4,7 @@ import datetime
 import json
 import numpy as np
 import ROOT
-from sampleBuilder import samples, samples_data
+from sampleBuilder import samples
 
 def load_cpp():
     """Load C++ helper functions."""
@@ -166,6 +166,7 @@ def main(dataset, out_dir):
     df = df.Filter("oppositeMuonCharge")
     df = df.Define("muonP4", "ConstructP4(ScoutingMuon_pt, ScoutingMuon_eta, ScoutingMuon_phi, ScoutingMuon_m)")
     df = df.Define("diMuonInvMass", "(muonP4[0] + muonP4[1]).M()")
+    df = df.Define("diMuonPt", "(muonP4[0] + muonP4[1]).Pt()")
 
     print("Creating and writing histogram for dimuon inv. mass + axo v3")
     histModel = ROOT.RDF.TH2DModel(
@@ -203,6 +204,44 @@ def main(dataset, out_dir):
     )
     hist_dimuonmass_v4.Write()
 
+    print("Creating and writing histogram for dimuon pt + axo v3")
+    histModel = ROOT.RDF.TH2DModel(
+        "diMuonInvPt_axov3",
+        "diMuonPt_axov3",
+        200,
+        0.0,
+        500.0,
+        hist_score_v3.GetNbinsX(),
+        hist_score_v3.GetXaxis().GetXmin(),
+        hist_score_v3.GetXaxis().GetXmax()
+    )
+    hist_dimuonpt_v3 = df.Histo2D(
+        histModel,
+        "diMuonPt",
+        "axol1tl_score_v3"
+    )
+    hist_dimuonpt_v3.Write()
+
+    print("Creating and writing histogram for dimuon pt + axo v4")
+    histModel = ROOT.RDF.TH2DModel(
+        "diMuonInvPt_axov4",
+        "diMuonPt_axov4",
+        200,
+        0.0,
+        500.0,
+        hist_score_v4.GetNbinsX(),
+        hist_score_v4.GetXaxis().GetXmin(),
+        hist_score_v4.GetXaxis().GetXmax()
+    )
+    hist_dimuonpt_v4 = df.Histo2D(
+        histModel,
+        "diMuonPt",
+        "axol1tl_score_v4"
+    )
+    hist_dimuonpt_v4.Write()
+
+
+    '''
     df_data = samples_data["2024F"].getNewDataframe()
 
     print("Creating and writing histogram for MC NPV")
@@ -218,14 +257,7 @@ def main(dataset, out_dir):
         "nScoutingPrimaryVertex"
     )
     hist_mc_npv.Write()
-
-
-
-
-
-
-
-
+    '''
 
     output_file.Close()
 
